@@ -100,13 +100,12 @@ const Template = () => {
 	const winWidth = window.innerWidth;
 	// const [currentIndex, setCurrentIndex] = useState(0);
 	const [posLeft, setPosLeft] = useState(0);
-	let listWidth = 10000;//gap * (len + 1);
+	let listWidth = gap * (len + 1);
 	const works = useRef();
 
 	useEffect(() => {
 		// console.log(list.current.clientWidth)
 		// console.log(`current: ${posLeft}, last: ${listWidth - winWidth}`)
-		listWidth = works.current.clientWidth;
 		if( isMobile ){
 			if( posLeft !== 0 ) setPosLeft(0);
 		}
