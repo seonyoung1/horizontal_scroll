@@ -126,7 +126,7 @@ const MainContainer = () => {
 	const resizeWorks = useCallback(() => {
 		listWidth = works.current.clientWidth;
 		winWidth = window.innerWidth;
-		console.log(posLeft, listWidth - winWidth);
+		// console.log(posLeft, listWidth - winWidth);
 		if (posLeft > listWidth - winWidth) {
 			return setPosLeft(listWidth - winWidth);
 		}
