@@ -4,7 +4,7 @@ import Basic from './works/Basic';
 import Thumb from './works/Thumb';
 import Text from './works/Text';
 import Intro from './intro';
-import {useMobile} from "../hooks";
+import { useMobile } from '../hooks';
 
 const data = [
 	{
@@ -94,7 +94,7 @@ const data = [
 ];
 
 const Template = () => {
-	const {isMobile} = useMobile();
+	const { isMobile } = useMobile();
 	const gap = 600;
 	const len = data.length;
 	const winWidth = window.innerWidth;
@@ -106,15 +106,15 @@ const Template = () => {
 	useEffect(() => {
 		// console.log(list.current.clientWidth)
 		// console.log(`current: ${posLeft}, last: ${listWidth - winWidth}`)
-		if( isMobile ){
-			if( posLeft !== 0 ) setPosLeft(0);
+		if (isMobile) {
+			if (posLeft !== 0) setPosLeft(0);
 		}
 	}, [posLeft, isMobile]);
 
 	useEffect(() => {
 		resizeWorks();
-		window.addEventListener("resize", resizeWorks);
-		return () => window.removeEventListener("resize", resizeWorks);
+		window.addEventListener('resize', resizeWorks);
+		return () => window.removeEventListener('resize', resizeWorks);
 	}, []);
 
 	const resizeWorks = () => {
@@ -122,27 +122,21 @@ const Template = () => {
 	};
 
 	const prevIndex = () => {
-		if( posLeft < gap ){
+		if (posLeft < gap) {
 			return setPosLeft(0);
 		}
 		return setPosLeft(posLeft - gap);
 	};
 
 	const nextIndex = () => {
-		if( posLeft > (listWidth - winWidth - gap)){
+		if (posLeft > listWidth - winWidth - gap) {
 			return setPosLeft(listWidth - winWidth);
 		}
 		return setPosLeft(posLeft + gap);
 	};
 
 	return (
-		<ReactScrollWheelHandler
-			upHandler={prevIndex}
-			downHandler={nextIndex}
-			customStyle={{transform:`translateX(-${posLeft}px)`}}
-			timeout={400}
-			pauseListeners={isMobile}
-		>
+		<ReactScrollWheelHandler upHandler={prevIndex} downHandler={nextIndex} customStyle={{ transform: `translateX(-${posLeft}px)` }} timeout={400} pauseListeners={isMobile}>
 			<ul className="work_list" ref={works}>
 				<li className="intro">
 					<Intro />
