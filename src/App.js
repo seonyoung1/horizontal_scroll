@@ -1,12 +1,12 @@
 import React from 'react';
-import Template from './components/Template';
+import MainContainer from './containers/MainContainer';
 import './styles/common.scss';
 
 const App = () => {
 	return (
 		<div id="wrapper">
 			<div className="container">
-				<Template />
+				<MainContainer />
 			</div>
 		</div>
 	);

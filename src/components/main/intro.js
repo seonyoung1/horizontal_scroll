@@ -4,7 +4,7 @@ const Intro = ({goWorks, category}) => {
     const {web, seo, front, back, vr, design} = category;
     return (
         <div>
-            introduce
+            <p>introduce</p>
             <div className="group">
                 <button onClick={() => goWorks(web)}>go web</button><br />
                 <button onClick={() => goWorks(seo)}>go seo</button><br />

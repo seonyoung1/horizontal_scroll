@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactScrollWheelHandler from 'react-scroll-wheel-handler';
-import {useSelector} from 'react-redux';
-import Basic from './works/Basic';
-import Thumb from './works/Thumb';
-import Text from './works/Text';
-import Intro from './intro';
+import { useSelector } from 'react-redux';
 import { useMobile } from '../hooks';
+import Intro from '../components/main/intro';
+import Template from '../components/main/Template';
 
 const data = [
 	{
@@ -100,7 +98,7 @@ const data = [
 	},
 ];
 
-const Template = () => {
+const MainContainer = () => {
 	const { isMobile } = useMobile();
 	const works = useRef();
 	const [posLeft, setPosLeft] = useState(0);
@@ -128,8 +126,11 @@ const Template = () => {
 	const resizeWorks = useCallback(() => {
 		listWidth = works.current.clientWidth;
 		winWidth = window.innerWidth;
-		// console.log(listWidth, winWidth);
-	}, [listWidth, winWidth]);
+		console.log(posLeft, listWidth - winWidth);
+		if (posLeft > listWidth - winWidth) {
+			return setPosLeft(listWidth - winWidth);
+		}
+	}, [listWidth, winWidth, posLeft]);
 
 	const prevIndex = useCallback(() => {
 		if (posLeft < gap) {
@@ -145,8 +146,8 @@ const Template = () => {
 		return setPosLeft(posLeft + gap);
 	}, [posLeft, listWidth, winWidth]);
 
-	const goWorks = (value) => {
-		if( value > listWidth - winWidth ){
+	const goWorks = value => {
+		if (value > listWidth - winWidth) {
 			return setPosLeft(listWidth - winWidth);
 		}
 		return setPosLeft(value);
@@ -167,15 +168,11 @@ const Template = () => {
 					<Intro goWorks={goWorks} category={category} />
 				</li>
 				{data.map(v => (
-					<li key={v.id} className={v.type} data-name={v.name}>
-						{v.type === 'basic' && <Basic data={v} />}
-						{v.type === 'thumb' && <Thumb data={v} />}
-						{v.type === 'text' && <Text data={v} />}
-					</li>
+					<Template key={v.id} data={v} />
 				))}
 			</ul>
 		</ReactScrollWheelHandler>
 	);
 };
 
-export default Template;
+export default MainContainer;
