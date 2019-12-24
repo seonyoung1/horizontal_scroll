@@ -93,7 +93,6 @@ const data = [
 	},
 ];
 
-
 const Template = () => {
 	const { isMobile } = useMobile();
 	const works = useRef();
@@ -101,7 +100,7 @@ const Template = () => {
 	const gap = 600;
 	const len = data.length;
 	let winWidth = window.innerWidth;
-	let listWidth = ( works.current !== undefined ) ? works.current.clientWidth : gap * (len + 1);
+	let listWidth = works.current !== undefined ? works.current.clientWidth : gap * (len + 1);
 	// const [currentIndex, setCurrentIndex] = useState(0);
 
 	useEffect(() => {
@@ -139,7 +138,15 @@ const Template = () => {
 	};
 
 	return (
-		<ReactScrollWheelHandler upHandler={prevIndex} downHandler={nextIndex} customStyle={{ transform: `translateX(-${posLeft}px)` }} timeout={400} pauseListeners={isMobile}>
+		<ReactScrollWheelHandler
+			upHandler={prevIndex}
+			leftHandler={prevIndex}
+			downHandler={nextIndex}
+			rightHandler={nextIndex}
+			customStyle={{ transform: `translateX(-${posLeft}px)` }}
+			timeout={400}
+			pauseListeners={isMobile}
+		>
 			<ul className="work_list" ref={works}>
 				<li className="intro">
 					<Intro />
