@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactScrollWheelHandler from 'react-scroll-wheel-handler';
+import {useSelector} from 'react-redux';
 import Basic from './works/Basic';
 import Thumb from './works/Thumb';
 import Text from './works/Text';
@@ -10,6 +11,7 @@ const data = [
 	{
 		id: 1,
 		type: 'basic',
+		name: 'web',
 		title: 'Lorem Ipsum is simply dummy text',
 		desc: 'contents',
 		image: 'images/image1.jpg',
@@ -17,6 +19,7 @@ const data = [
 	{
 		id: 2,
 		type: 'thumb',
+		name: 'seo',
 		title: 'work2',
 		contents: [
 			{
@@ -32,6 +35,7 @@ const data = [
 	{
 		id: 3,
 		type: 'text',
+		name: 'front',
 		title: 'work3',
 		contents: [
 			{
@@ -53,6 +57,7 @@ const data = [
 	{
 		id: 4,
 		type: 'thumb',
+		name: 'back',
 		title: 'work4',
 		contents: [
 			{
@@ -68,6 +73,7 @@ const data = [
 	{
 		id: 5,
 		type: 'basic',
+		name: 'vr',
 		title: 'making it over 2000 years old',
 		desc: 'contents',
 		image: 'images/image3.jpg',
@@ -75,6 +81,7 @@ const data = [
 	{
 		id: 6,
 		type: 'text',
+		name: 'design',
 		title: 'work3',
 		contents: [
 			{
@@ -97,7 +104,8 @@ const Template = () => {
 	const { isMobile } = useMobile();
 	const works = useRef();
 	const [posLeft, setPosLeft] = useState(0);
-	const gap = 600;
+	const { category } = useSelector(state => state.common);
+	const gap = 600; // 한칸 이동거리
 	const len = data.length;
 	let winWidth = window.innerWidth;
 	let listWidth = works.current !== undefined ? works.current.clientWidth : gap * (len + 1);
@@ -117,24 +125,31 @@ const Template = () => {
 		return () => window.removeEventListener('resize', resizeWorks);
 	}, []);
 
-	const resizeWorks = () => {
+	const resizeWorks = useCallback(() => {
 		listWidth = works.current.clientWidth;
 		winWidth = window.innerWidth;
 		// console.log(listWidth, winWidth);
-	};
+	}, [listWidth, winWidth]);
 
-	const prevIndex = () => {
+	const prevIndex = useCallback(() => {
 		if (posLeft < gap) {
 			return setPosLeft(0);
 		}
 		return setPosLeft(posLeft - gap);
-	};
+	}, [posLeft]);
 
-	const nextIndex = () => {
+	const nextIndex = useCallback(() => {
 		if (posLeft > listWidth - winWidth - gap) {
 			return setPosLeft(listWidth - winWidth);
 		}
 		return setPosLeft(posLeft + gap);
+	}, [posLeft, listWidth, winWidth]);
+
+	const goWorks = (value) => {
+		if( value > listWidth - winWidth ){
+			return setPosLeft(listWidth - winWidth);
+		}
+		return setPosLeft(value);
 	};
 
 	return (
@@ -149,10 +164,10 @@ const Template = () => {
 		>
 			<ul className="work_list" ref={works}>
 				<li className="intro">
-					<Intro />
+					<Intro goWorks={goWorks} category={category} />
 				</li>
 				{data.map(v => (
-					<li key={v.id} className={v.type}>
+					<li key={v.id} className={v.type} data-name={v.name}>
 						{v.type === 'basic' && <Basic data={v} />}
 						{v.type === 'thumb' && <Thumb data={v} />}
 						{v.type === 'text' && <Text data={v} />}
