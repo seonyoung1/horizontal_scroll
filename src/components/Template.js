@@ -93,15 +93,16 @@ const data = [
 	},
 ];
 
+
 const Template = () => {
 	const { isMobile } = useMobile();
+	const works = useRef();
+	const [posLeft, setPosLeft] = useState(0);
 	const gap = 600;
 	const len = data.length;
-	const winWidth = window.innerWidth;
+	let winWidth = window.innerWidth;
+	let listWidth = ( works.current !== undefined ) ? works.current.clientWidth : gap * (len + 1);
 	// const [currentIndex, setCurrentIndex] = useState(0);
-	const [posLeft, setPosLeft] = useState(0);
-	let listWidth = gap * (len + 1);
-	const works = useRef();
 
 	useEffect(() => {
 		// console.log(list.current.clientWidth)
@@ -119,6 +120,8 @@ const Template = () => {
 
 	const resizeWorks = () => {
 		listWidth = works.current.clientWidth;
+		winWidth = window.innerWidth;
+		// console.log(listWidth, winWidth);
 	};
 
 	const prevIndex = () => {
