@@ -101,7 +101,7 @@ const data = [
 
 const MainContainer = () => {
 	const { isMobile } = useMobile();
-	const mobileAgent = navigator.userAgent.indexOf('Mobi') > -1;
+	const mobileAgent = (/iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
 	const works = useRef();
 	const [posLeft, setPosLeft] = useState(0);
 	const { category } = useSelector(state => state.common);
