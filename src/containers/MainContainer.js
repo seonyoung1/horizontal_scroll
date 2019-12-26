@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactScrollWheelHandler from 'react-scroll-wheel-handler';
+import { scroller } from 'react-scroll';
 import { useSelector } from 'react-redux';
 import { useMobile } from '../hooks';
 import Intro from '../components/main/intro';
@@ -10,7 +11,7 @@ const data = [
 		id: 1,
 		type: 'basic',
 		name: 'web',
-		title: 'Lorem Ipsum is simply dummy text',
+		title: '1 web Lorem Ipsum is simply dummy text',
 		desc: 'contents',
 		image: 'images/image1.jpg',
 	},
@@ -21,7 +22,7 @@ const data = [
 		title: 'work2',
 		contents: [
 			{
-				title: 'work',
+				title: '2 seo work',
 				image: 'images/image5.jpg',
 			},
 			{
@@ -37,7 +38,7 @@ const data = [
 		title: 'work3',
 		contents: [
 			{
-				title: 'The Extremes of Good and Evil',
+				title: '3 front The Extremes of Good and Evil',
 				desc: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
 			},
 			{
@@ -59,7 +60,7 @@ const data = [
 		title: 'work4',
 		contents: [
 			{
-				title: 'work',
+				title: '4 back work',
 				image: 'images/image2.jpg',
 			},
 			{
@@ -72,7 +73,7 @@ const data = [
 		id: 5,
 		type: 'basic',
 		name: 'vr',
-		title: 'making it over 2000 years old',
+		title: '5 vr making it over 2000 years old',
 		desc: 'contents',
 		image: 'images/image3.jpg',
 	},
@@ -83,7 +84,7 @@ const data = [
 		title: 'work3',
 		contents: [
 			{
-				title: 'combined with a handful',
+				title: '6 design combined with a handful',
 				desc: 'more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
 			},
 			{
@@ -103,34 +104,32 @@ const MainContainer = () => {
 	const works = useRef();
 	const [posLeft, setPosLeft] = useState(0);
 	const { category } = useSelector(state => state.common);
-	const gap = 600; // 한칸 이동거리
-	const len = data.length;
+	const { web, seo, front, back, vr, design } = useSelector(state => state.common.category);
 	let winWidth = window.innerWidth;
+	let gap = winWidth > 1800 ? 600 : Math.ceil(winWidth / 3); // 한칸 이동거리
+	const len = data.length;
 	let listWidth = works.current !== undefined ? works.current.clientWidth : gap * (len + 1);
 	// const [currentIndex, setCurrentIndex] = useState(0);
 
 	useEffect(() => {
-		// console.log(list.current.clientWidth)
-		// console.log(`current: ${posLeft}, last: ${listWidth - winWidth}`)
 		if (isMobile) {
 			if (posLeft !== 0) setPosLeft(0);
 		}
-	}, [posLeft, isMobile]);
+	}, [isMobile]);
 
 	useEffect(() => {
 		resizeWorks();
 		window.addEventListener('resize', resizeWorks);
 		return () => window.removeEventListener('resize', resizeWorks);
-	}, []);
+	}, [posLeft]);
 
-	const resizeWorks = useCallback(() => {
+	const resizeWorks = () => {
 		listWidth = works.current.clientWidth;
 		winWidth = window.innerWidth;
-		// console.log(posLeft, listWidth - winWidth);
 		if (posLeft > listWidth - winWidth) {
 			return setPosLeft(listWidth - winWidth);
 		}
-	}, [listWidth, winWidth, posLeft]);
+	};
 
 	const prevIndex = useCallback(() => {
 		if (posLeft < gap) {
@@ -146,32 +145,54 @@ const MainContainer = () => {
 		return setPosLeft(posLeft + gap);
 	}, [posLeft, listWidth, winWidth]);
 
-	const goWorks = value => {
-		if (value > listWidth - winWidth) {
-			return setPosLeft(listWidth - winWidth);
+	const goWorks = useCallback((value, name) => {
+		if (winWidth >= 768) {
+			if (value > listWidth - winWidth) {
+				return setPosLeft(listWidth - winWidth);
+			}
+			return setPosLeft(value);
+		} else {
+			const target = `works-${name}`;
+			console.log(target);
+			scroller.scrollTo(target, {
+				duration: 500,
+				smooth: 'easeInOut',
+				offset: -50,
+			});
 		}
-		return setPosLeft(value);
-	};
+	}, [listWidth, winWidth]);
 
 	return (
-		<ReactScrollWheelHandler
-			upHandler={prevIndex}
-			leftHandler={prevIndex}
-			downHandler={nextIndex}
-			rightHandler={nextIndex}
-			customStyle={{ transform: `translateX(-${posLeft}px)` }}
-			timeout={400}
-			pauseListeners={isMobile}
-		>
-			<ul className="work_list" ref={works}>
-				<li className="intro">
-					<Intro goWorks={goWorks} category={category} />
-				</li>
-				{data.map(v => (
-					<Template key={v.id} data={v} />
-				))}
-			</ul>
-		</ReactScrollWheelHandler>
+		<>
+			{isMobile &&
+				<div className="group">
+					<button onClick={() => goWorks(web, 'web')}>go 1</button>
+					<button onClick={() => goWorks(seo, 'seo')}>go 2</button>
+					<button onClick={() => goWorks(front, 'front')}>go 3</button>
+					<button onClick={() => goWorks(back, 'back')}>go 4</button>
+					<button onClick={() => goWorks(vr, 'vr')}>go 5</button>
+					<button onClick={() => goWorks(design, 'design')}>go 6</button>
+				</div>
+			}
+			<ReactScrollWheelHandler
+				upHandler={prevIndex}
+				leftHandler={prevIndex}
+				downHandler={nextIndex}
+				rightHandler={nextIndex}
+				customStyle={{ transform: `translateX(-${posLeft}px)` }}
+				timeout={400}
+				pauseListeners={isMobile}
+			>
+				<ul className="work_list" ref={works}>
+					<li className="intro">
+						<Intro goWorks={goWorks} category={category} />
+					</li>
+					{data.map(v => (
+						<Template key={v.id} data={v} />
+					))}
+				</ul>
+			</ReactScrollWheelHandler>
+		</>
 	);
 };
 

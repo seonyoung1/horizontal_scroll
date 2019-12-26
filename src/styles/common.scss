@@ -3,33 +3,35 @@
 @import "module/variables";
 @import "reset.scss";
 
+body{
+    overflow:hidden;
+    @media (max-width : 768px) {
+        overflow-y:auto;
+    }
+}
+
 .blind{
     overflow:hidden;position:absolute;top:0;left:0;width:1px;height:1px;font-size:0;line-height:0
 }
 
-#wrapper{
-
-}
-
 .container{
-    display:flex;width:100%;height:100vh;overflow:hidden;
+    display:flex;width:100%;height:100vh;
     > div{
         display:block;position:relative;
         transition:transform .5s ease-in-out;
     }
     @media (max-width : 768px) {
-        overflow:auto;display:block;
+        display:block;
         > div{
             transform:translateX(0) !important;
             transition:transform 0s ease-in-out;
         }
     }
 }
-
 .work_list{
     display:flex;
     li{
-        width:33.4vw;max-width:600px;height:100vh;border-right:1px solid #000;
+        width:33.3334vw;max-width:600px;height:100vh;border-right:1px solid #000;
         img{
             overflow:hidden;position:absolute;top:0;left:0;width:1px;height:1px;font-size:0;line-height:0
         }
@@ -39,7 +41,7 @@
                 background-position:center;background-size:cover;background-repeat:no-repeat;
             }
             .title{
-                font-size:2.4em;padding:1em;
+                font-size:2.4em;padding:0.5em;
             }
         }
         &.basic{
@@ -53,6 +55,9 @@
         &.thumb{
             .image{
                 height:50%;
+                p{
+                    font-size:2em; padding:0.5em;
+                }
             }
         }
         &.text{
@@ -73,13 +78,13 @@
             }
             .group{
                 button{
-                    color:#f1c40f;line-height:1;
+                    color:#f1c40f; border:1px solid #fff;border-radius:2px;padding:5px 10px;margin:0 3px;
                 }
             }
         }
     }
     @media (max-width : 768px) {
-        display:block;
+        display:block;padding-top:50px;
         li{
             width:100%;max-width:100%;height:auto;border-right:0;border-bottom:1px solid #000;
             > div {
@@ -103,6 +108,23 @@
                     height:auto;
                 }
             }
+        }
+    }
+}
+
+@media (max-width : 768px) {
+    .container .group {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 50px;
+        background-color:#000;
+        display:flex;
+        justify-content:space-between;
+        z-index: 1000;
+        button{
+            width:100%;color:#fff;text-align:center;
         }
     }
 }
