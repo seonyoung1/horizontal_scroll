@@ -101,6 +101,7 @@ const data = [
 
 const MainContainer = () => {
 	const { isMobile } = useMobile();
+	const mobileAgent = navigator.userAgent.indexOf('Mobi') > -1;
 	const works = useRef();
 	const [posLeft, setPosLeft] = useState(0);
 	const { category } = useSelector(state => state.common);
@@ -110,6 +111,7 @@ const MainContainer = () => {
 	const len = data.length;
 	let listWidth = works.current !== undefined ? works.current.clientWidth : gap * (len + 1);
 	// const [currentIndex, setCurrentIndex] = useState(0);
+	console.log(mobileAgent);
 
 	useEffect(() => {
 		if (isMobile) {
@@ -153,7 +155,7 @@ const MainContainer = () => {
 			return setPosLeft(value);
 		} else {
 			const target = `works-${name}`;
-			console.log(target);
+			// console.log(target);
 			scroller.scrollTo(target, {
 				duration: 500,
 				smooth: 'easeInOut',
@@ -175,10 +177,10 @@ const MainContainer = () => {
 				</div>
 			}
 			<ReactScrollWheelHandler
-				upHandler={prevIndex}
-				leftHandler={prevIndex}
-				downHandler={nextIndex}
-				rightHandler={nextIndex}
+				upHandler={!mobileAgent? prevIndex : nextIndex}
+				leftHandler={!mobileAgent? prevIndex : nextIndex}
+				downHandler={!mobileAgent? nextIndex : prevIndex}
+				rightHandler={!mobileAgent? nextIndex : prevIndex}
 				customStyle={{ transform: `translateX(-${posLeft}px)` }}
 				timeout={400}
 				pauseListeners={isMobile}
