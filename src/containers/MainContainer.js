@@ -111,8 +111,6 @@ const MainContainer = () => {
 	const len = data.length;
 	let listWidth = works.current !== undefined ? works.current.clientWidth : gap * (len + 1);
 	// const [currentIndex, setCurrentIndex] = useState(0);
-	console.log(mobileAgent);
-	alert(mobileAgent);
 
 	useEffect(() => {
 		if (isMobile) {
