@@ -189,7 +189,7 @@ const MainContainer = () => {
 						<Intro goWorks={goWorks} category={category} />
 					</li>
 					{data.map(v => (
-						<Template key={v.id} data={v} />
+						<Template key={v.id} data={v} posLeft={posLeft} gap={gap} winWidth={winWidth} listWidth={listWidth} />
 					))}
 				</ul>
 			</ReactScrollWheelHandler>
