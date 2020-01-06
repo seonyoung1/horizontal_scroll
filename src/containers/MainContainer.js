@@ -185,7 +185,7 @@ const MainContainer = () => {
 				pauseListeners={isMobile}
 			>
 				<ul className="work_list" ref={works}>
-					<li className="intro">
+					<li className="intro is-active">
 						<Intro goWorks={goWorks} category={category} />
 					</li>
 					{data.map(v => (
