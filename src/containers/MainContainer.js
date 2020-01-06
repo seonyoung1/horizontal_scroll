@@ -101,7 +101,7 @@ const data = [
 
 const MainContainer = () => {
 	const { isMobile } = useMobile();
-	const mobileAgent = (/iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
+	const iPadAgent = (/iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
 	const works = useRef();
 	const [posLeft, setPosLeft] = useState(0);
 	const { category } = useSelector(state => state.common);
@@ -176,10 +176,10 @@ const MainContainer = () => {
 				</div>
 			}
 			<ReactScrollWheelHandler
-				upHandler={!mobileAgent? prevIndex : nextIndex}
-				leftHandler={!mobileAgent? prevIndex : nextIndex}
-				downHandler={!mobileAgent? nextIndex : prevIndex}
-				rightHandler={!mobileAgent? nextIndex : prevIndex}
+				upHandler={!iPadAgent? prevIndex : nextIndex}
+				leftHandler={!iPadAgent? prevIndex : nextIndex}
+				downHandler={!iPadAgent? nextIndex : prevIndex}
+				rightHandler={!iPadAgent? nextIndex : prevIndex}
 				customStyle={{ transform: `translateX(-${posLeft}px)` }}
 				timeout={400}
 				pauseListeners={isMobile}
