@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useMobile } from '../hooks';
 import Intro from '../components/main/intro';
 import Template from '../components/main/Template';
+import Group from '../components/main/group';
 
 const data = [
 	{
@@ -102,14 +103,14 @@ const data = [
 const MainContainer = () => {
 	const { isMobile } = useMobile();
 	const iPadAgent = (/iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
-	const works = useRef();
+	const works = useRef(null);
 	const [posLeft, setPosLeft] = useState(0);
 	const { category } = useSelector(state => state.common);
-	const { web, seo, front, back, vr, design } = useSelector(state => state.common.category);
+	// const { web, seo, front, back, vr, design } = useSelector(state => state.common.category);
 	let winWidth = window.innerWidth;
 	let gap = winWidth > 1800 ? 600 : Math.ceil(winWidth / 3); // 한칸 이동거리
 	const len = data.length;
-	let listWidth = works.current !== undefined ? works.current.clientWidth : gap * (len + 1);
+	let listWidth = works.current !== null ? works.current.clientWidth : gap * (len + 1);
 	// const [currentIndex, setCurrentIndex] = useState(0);
 
 	useEffect(() => {
@@ -154,7 +155,6 @@ const MainContainer = () => {
 			return setPosLeft(value);
 		} else {
 			const target = `works-${name}`;
-			// console.log(target);
 			scroller.scrollTo(target, {
 				duration: 500,
 				smooth: 'easeInOut',
@@ -165,21 +165,12 @@ const MainContainer = () => {
 
 	return (
 		<>
-			{isMobile &&
-				<div className="group">
-					<button onClick={() => goWorks(web, 'web')}>go 1</button>
-					<button onClick={() => goWorks(seo, 'seo')}>go 2</button>
-					<button onClick={() => goWorks(front, 'front')}>go 3</button>
-					<button onClick={() => goWorks(back, 'back')}>go 4</button>
-					<button onClick={() => goWorks(vr, 'vr')}>go 5</button>
-					<button onClick={() => goWorks(design, 'design')}>go 6</button>
-				</div>
-			}
+			{isMobile && <Group goWorks={goWorks} category={category} />}
 			<ReactScrollWheelHandler
-				upHandler={!iPadAgent? prevIndex : nextIndex}
-				leftHandler={!iPadAgent? prevIndex : nextIndex}
-				downHandler={!iPadAgent? nextIndex : prevIndex}
-				rightHandler={!iPadAgent? nextIndex : prevIndex}
+				upHandler={!iPadAgent ? prevIndex : nextIndex}
+				leftHandler={!iPadAgent ? prevIndex : nextIndex}
+				downHandler={!iPadAgent ? nextIndex : prevIndex}
+				rightHandler={!iPadAgent ? nextIndex : prevIndex}
 				customStyle={{ transform: `translateX(-${posLeft}px)` }}
 				timeout={400}
 				pauseListeners={isMobile}
